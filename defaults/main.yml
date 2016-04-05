@@ -1,13 +1,8 @@
 ---
 # defaults file for vips
 
-vips_openjpeg_version: "version.1.5.2"
 vips_openjpeg_path: "{{ ansible_user_dir }}/openjpeg"
 
-vips_libtiff_version: "Release-v4-0-3"
 vips_libtiff_path: "{{ ansible_user_dir }}/libtiff"
 
-vips_openslide_version: "Release-v4-0-3"
 vips_openslide_path: "{{ ansible_user_dir }}/openslide"
-
-build_parallelism: "{{ ansible_processor_vcpus + 1 }}"
