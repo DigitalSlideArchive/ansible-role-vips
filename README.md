@@ -31,4 +31,4 @@ You can (but probably won't need to) override the variables:
 License
 -------
 
-Apache 2.0
+[![Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/DigitalSlideArchive/ansible-role-vips/master/LICENSE)
