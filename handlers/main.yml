@@ -1,0 +1,57 @@
+---
+# handlers file for vips
+
+- name: Build OpenJPEG
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openjpeg_path }}"
+  with_items:
+    - "cmake ."
+    - "make -j{{ build_parallelism }}"
+  notify: Install OpenJPEG
+
+- name: Install OpenJPEG
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openjpeg_path }}"
+  sudo: yes
+  with_items:
+    - "make install"
+    - "ldconfig"
+
+- name: Build LibTIFF
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_libtiff_path }}"
+  with_items:
+    - "./configure"
+    - "make -j{{ build_parallelism }}"
+  notify: Install LibTIFF
+
+- name: Install LibTIFF
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_libtiff_path }}"
+  sudo: yes
+  with_items:
+    - "make install"
+    - "ldconfig"
+
+- name: Build OpenSlide
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+  with_items:
+    - "autoreconf -i"
+    - "./configure"
+    - "make -j{{ build_parallelism }}"
+  notify: Install OpenSlide
+
+- name: Install OpenSlide
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+  sudo: yes
+  with_items:
+    - "make install"
+    - "ldconfig"

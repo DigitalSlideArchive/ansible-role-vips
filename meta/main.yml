@@ -1,0 +1,45 @@
+galaxy_info:
+  author: Brian Helba
+  description: Install VIPS image processing software with bug-free OpenSlide support.
+  company: Kitware, Inc.
+
+  license: Apache
+  min_ansible_version: 1.4
+
+  # Below are all platforms currently available. Just uncomment
+  # the ones that apply to your role. If you don't see your
+  # platform on this list, let us know and we'll get it added!
+  #
+  platforms:
+  - name: Ubuntu
+    versions:
+  #  - all
+  #  - lucid
+  #  - maverick
+  #  - natty
+  #  - oneiric
+  #  - precise
+  #  - quantal
+  #  - raring
+  #  - saucy
+    - trusty
+  #  - utopic
+  #  - vivid
+  #  - wily
+  #  - xenial
+  #- name: Debian
+  #  versions:
+  #  - all
+  #  - etch
+  #  - jessie
+  #  - lenny
+  #  - squeeze
+  #  - wheezy
+
+  galaxy_tags:
+    - vips
+    - openslide
+    - tiff
+    - libtiff
+
+dependencies: []

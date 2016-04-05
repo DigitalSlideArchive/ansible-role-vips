@@ -1,0 +1,91 @@
+---
+# tasks file for vips
+
+- name: Install OpenJPEG dependencies
+  apt:
+    name: "{{ item }}"
+  sudo: yes
+  with_items:
+    - git
+    - cmake
+    - build-essential
+    - libglib2.0-dev
+    - libjpeg-dev
+    - libxml2-dev
+    - libpng12-dev
+
+- name: Download OpenJPEG
+  git:
+    repo: "https://github.com/uclouvain/openjpeg.git"
+    dest: "{{ vips_openjpeg_path }}"
+    version: "{{ vips_openjpeg_version }}"
+    update: no
+    force: yes
+  notify: Build OpenJPEG
+
+# Ensure OpenJPEG is fully installed
+- meta: flush_handlers
+
+- name: Install LibTIFF dependencies
+  apt:
+    name: "{{ item }}"
+  sudo: yes
+  with_items:
+    - git
+    - build-essential
+
+- name: Download LibTIFF
+  git:
+    repo: "https://github.com/vadz/libtiff.git"
+    dest: "{{ vips_libtiff_path }}"
+    version: "{{ vips_libtiff_version }}"
+    update: no
+    force: yes
+  notify: Build LibTIFF
+
+# Ensure LibTIFF is fully installed
+- meta: flush_handlers
+
+- name: Remove system OpenSlide
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  sudo: yes
+  with_items:
+    - python-openslide
+    - openslide-tools
+    - libopenslide-dev
+    - libopenslide0
+
+- name: Install OpenSlide dependencies
+  apt:
+    name: "{{ item }}"
+  sudo: yes
+  # TODO: prevent these from installing X Windows stuff
+  with_items:
+    - autoconf
+    - automake
+    - libtool
+    - pkg-config
+    - libcairo2-dev
+    - libgdk-pixbuf2.0-dev
+    - libxml2-dev
+    - libsqlite3-dev
+
+- name: Download OpenSlide
+  git:
+    repo: "https://github.com/openslide/openslide.git"
+    dest: "{{ vips_openslide_path }}"
+    version: "{{ vips_openslide_version }}"
+    update: no
+    force: yes
+  notify: Build OpenSlide
+
+# Ensure OpenSlide is fully installed
+- meta: flush_handlers
+
+- name: Install VIPS
+  apt:
+    name: libvips-tools
+  sudo: yes
