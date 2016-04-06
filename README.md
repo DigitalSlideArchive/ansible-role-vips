@@ -1,5 +1,7 @@
-Role Name
-=========
+DigitalSlideArchive.vips
+========================
+[![Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/DigitalSlideArchive/ansible-role-vips/master/LICENSE)
+[![Build Status](https://travis-ci.org/DigitalSlideArchive/ansible-role-vips.svg?branch=master)](https://travis-ci.org/DigitalSlideArchive/ansible-role-vips)
 
 An Ansible role to install [VIPS image processing software](http://www.vips.ecs.soton.ac.uk/)
 with bug-free OpenSlide support.
@@ -27,8 +29,3 @@ You can (but probably won't need to) override the variables:
 * `vips_libtiff_version`: Git commit-ish for fetching LibTIFF.
 * `vips_openslide_version`: Git commit-ish for fetching OpenSlide.
 * `build_parallelism: "{{ ansible_processor_vcpus + 1 }}"
-
-License
--------
-
-[![Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/DigitalSlideArchive/ansible-role-vips/master/LICENSE)
