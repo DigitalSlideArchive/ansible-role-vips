@@ -6,3 +6,5 @@ vips_openjpeg_path: "{{ ansible_user_dir }}/openjpeg"
 vips_libtiff_path: "{{ ansible_user_dir }}/libtiff"
 
 vips_openslide_path: "{{ ansible_user_dir }}/openslide"
+
+vips_path: "{{ ansible_user_dir }}/vips"

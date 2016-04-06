@@ -64,7 +64,8 @@
   sudo: yes
   # TODO: prevent these from installing X Windows stuff
   with_items:
-    - autoconf
+    - git
+    - build-essential
     - automake
     - libtool
     - pkg-config
@@ -85,7 +86,30 @@
 # Ensure OpenSlide is fully installed
 - meta: flush_handlers
 
-- name: Install VIPS
+- name: Install VIPS dependencies
   apt:
-    name: libvips-tools
+    name: "{{ item }}"
   sudo: yes
+  with_items:
+    - git
+    - build-essential
+    - automake
+    - gtk-doc-tools
+    - swig2.0
+    - gobject-introspection
+    - pkg-config
+    - libglib2.0-dev
+    - libxml2-dev
+    - libgsf-1-dev
+    # optional
+    - liborc-0.4-dev
+    - libfftw3-dev
+
+- name: Download VIPS
+  git:
+    repo: "https://github.com/jcupitt/libvips.git"
+    dest: "{{ vips_path }}"
+    version: "{{ vips_version }}"
+    update: no
+    force: yes
+  notify: Build VIPS

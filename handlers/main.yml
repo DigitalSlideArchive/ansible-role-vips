@@ -55,3 +55,22 @@
   with_items:
     - "make install"
     - "ldconfig"
+
+- name: Build VIPS
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_path }}"
+  with_items:
+    - "./bootstrap.sh"
+    - "./configure"
+    - "make -j{{ build_parallelism }}"
+  notify: Install VIPS
+
+- name: Install VIPS
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_path }}"
+  sudo: yes
+  with_items:
+    - "make install"
+    - "ldconfig"
