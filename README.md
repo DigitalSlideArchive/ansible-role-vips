@@ -28,4 +28,4 @@ You can (but probably won't need to) override the variables:
 * `vips_openjpeg_version`: Git commit-ish for fetching OpenJPEG.
 * `vips_libtiff_version`: Git commit-ish for fetching LibTIFF.
 * `vips_openslide_version`: Git commit-ish for fetching OpenSlide.
-* `build_parallelism: "{{ ansible_processor_vcpus + 1 }}"
+* `build_parallelism`: "{{ ansible_processor_vcpus + 1 }}"
