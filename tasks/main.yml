@@ -95,7 +95,7 @@
     - build-essential
     - automake
     - gtk-doc-tools
-    - swig2.0
+    - swig
     - gobject-introspection
     - pkg-config
     - libglib2.0-dev
