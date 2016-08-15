@@ -1,0 +1,48 @@
+---
+
+- name: Install VIPS dependencies
+  apt:
+    name: "{{ item }}"
+  become: yes
+  become_user: root
+  with_items:
+    - git
+    - build-essential
+    - automake
+    - gtk-doc-tools
+    - swig
+    - gobject-introspection
+    - pkg-config
+    - libglib2.0-dev
+    - libxml2-dev
+    - libgsf-1-dev
+    # optional
+    - liborc-0.4-dev
+    - libfftw3-dev
+
+- name: Download VIPS
+  git:
+    repo: "https://github.com/jcupitt/libvips.git"
+    dest: "{{ vips_path }}"
+    version: "{{ vips_version }}"
+    update: no
+    force: yes
+
+- name: Build VIPS
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_path }}"
+  with_items:
+    - "./bootstrap.sh"
+    - "./configure"
+    - "make -j{{ build_parallelism }}"
+
+- name: Install VIPS
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_path }}"
+  become: yes
+  become_user: root
+  with_items:
+    - "make install"
+    - "ldconfig"

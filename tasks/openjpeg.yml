@@ -1,0 +1,41 @@
+---
+
+- name: Install OpenJPEG dependencies
+  apt:
+    name: "{{ item }}"
+  become: yes
+  become_user: root
+  with_items:
+    - git
+    - cmake
+    - build-essential
+    - libglib2.0-dev
+    - libjpeg-dev
+    - libxml2-dev
+    - libpng12-dev
+
+- name: Download OpenJPEG
+  git:
+    repo: "https://github.com/uclouvain/openjpeg.git"
+    dest: "{{ vips_openjpeg_path }}"
+    version: "{{ vips_openjpeg_version }}"
+    update: no
+    force: yes
+
+- name: Build OpenJPEG
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openjpeg_path }}"
+  with_items:
+    - "cmake ."
+    - "make -j{{ build_parallelism }}"
+
+- name: Install OpenJPEG
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openjpeg_path }}"
+  become: yes
+  become_user: root
+  with_items:
+    - "make install"
+    - "ldconfig"
