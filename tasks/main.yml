@@ -1,115 +1,41 @@
 ---
 # tasks file for vips
 
-- name: Install OpenJPEG dependencies
-  apt:
-    name: "{{ item }}"
-  sudo: yes
-  with_items:
-    - git
-    - cmake
-    - build-essential
-    - libglib2.0-dev
-    - libjpeg-dev
-    - libxml2-dev
-    - libpng12-dev
+- name: Check for installed OpenJPEG
+  find:
+    patterns: "libopenjpeg.so"
+    paths: "/usr/local/lib"
+  register: vips_openjpeg_find_installed
 
-- name: Download OpenJPEG
-  git:
-    repo: "https://github.com/uclouvain/openjpeg.git"
-    dest: "{{ vips_openjpeg_path }}"
-    version: "{{ vips_openjpeg_version }}"
-    update: no
-    force: yes
-  notify: Build OpenJPEG
+- include: tasks/openjpeg.yml
+  when: "vips_openjpeg_find_installed.matched == 0"
 
-# Ensure OpenJPEG is fully installed
-- meta: flush_handlers
 
-- name: Install LibTIFF dependencies
-  apt:
-    name: "{{ item }}"
-  sudo: yes
-  with_items:
-    - git
-    - build-essential
+- name: Check for installed LibTIFF
+  find:
+    patterns: "libtiff.so"
+    paths: "/usr/local/lib"
+  register: vips_libtiff_find_installed
 
-- name: Download LibTIFF
-  git:
-    repo: "https://github.com/vadz/libtiff.git"
-    dest: "{{ vips_libtiff_path }}"
-    version: "{{ vips_libtiff_version }}"
-    update: no
-    force: yes
-  notify: Build LibTIFF
+- include: tasks/libtiff.yml
+  when: "vips_libtiff_find_installed.matched == 0"
 
-# Ensure LibTIFF is fully installed
-- meta: flush_handlers
 
-- name: Remove system OpenSlide
-  apt:
-    name: "{{ item }}"
-    state: absent
-    purge: yes
-  sudo: yes
-  with_items:
-    - python-openslide
-    - openslide-tools
-    - libopenslide-dev
-    - libopenslide0
+- name: Check for installed OpenSlide
+  find:
+    patterns: "libopenslide.so"
+    paths: "/usr/local/lib"
+  register: vips_openslide_find_installed
 
-- name: Install OpenSlide dependencies
-  apt:
-    name: "{{ item }}"
-  sudo: yes
-  # TODO: prevent these from installing X Windows stuff
-  with_items:
-    - git
-    - build-essential
-    - automake
-    - libtool
-    - pkg-config
-    - libcairo2-dev
-    - libgdk-pixbuf2.0-dev
-    - libxml2-dev
-    - libsqlite3-dev
+- include: tasks/openslide.yml
+  when: "vips_openslide_find_installed.matched == 0"
 
-- name: Download OpenSlide
-  git:
-    repo: "https://github.com/openslide/openslide.git"
-    dest: "{{ vips_openslide_path }}"
-    version: "{{ vips_openslide_version }}"
-    update: no
-    force: yes
-  notify: Build OpenSlide
 
-# Ensure OpenSlide is fully installed
-- meta: flush_handlers
+- name: Check for installed VIPS
+  find:
+    patterns: "vips"
+    paths: "/usr/local/bin"
+  register: vips_find_installed
 
-- name: Install VIPS dependencies
-  apt:
-    name: "{{ item }}"
-  sudo: yes
-  with_items:
-    - git
-    - build-essential
-    - automake
-    - gtk-doc-tools
-    - swig
-    - gobject-introspection
-    - pkg-config
-    - libglib2.0-dev
-    - libxml2-dev
-    - libgsf-1-dev
-    # optional
-    - liborc-0.4-dev
-    - libfftw3-dev
-
-- name: Download VIPS
-  git:
-    repo: "https://github.com/jcupitt/libvips.git"
-    dest: "{{ vips_path }}"
-    version: "{{ vips_version }}"
-    update: no
-    force: yes
-  notify: Build VIPS
+- include: tasks/vips.yml
+  when: "vips_find_installed.matched == 0"

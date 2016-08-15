@@ -1,0 +1,58 @@
+---
+
+- name: Remove system OpenSlide
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  become: yes
+  become_user: root
+  with_items:
+    - python-openslide
+    - openslide-tools
+    - libopenslide-dev
+    - libopenslide0
+
+- name: Install OpenSlide dependencies
+  apt:
+    name: "{{ item }}"
+  become: yes
+  become_user: root
+  # TODO: prevent these from installing X Windows stuff
+  with_items:
+    - git
+    - build-essential
+    - automake
+    - libtool
+    - pkg-config
+    - libcairo2-dev
+    - libgdk-pixbuf2.0-dev
+    - libxml2-dev
+    - libsqlite3-dev
+
+- name: Download OpenSlide
+  git:
+    repo: "https://github.com/openslide/openslide.git"
+    dest: "{{ vips_openslide_path }}"
+    version: "{{ vips_openslide_version }}"
+    update: no
+    force: yes
+
+- name: Build OpenSlide
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+  with_items:
+    - "autoreconf -i"
+    - "./configure"
+    - "make -j{{ build_parallelism }}"
+
+- name: Install OpenSlide
+  command: "{{ item }}"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+  become: yes
+  become_user: root
+  with_items:
+    - "make install"
+    - "ldconfig"
