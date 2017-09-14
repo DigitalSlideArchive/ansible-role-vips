@@ -1,0 +1,35 @@
+---
+
+- listen: Rebuild OpenSlide
+  name: Initialize OpenSlide
+  command: "autoreconf -i"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+
+- listen: Rebuild OpenSlide
+  name: Configure OpenSlide
+  command: "./configure"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+
+- listen: Rebuild OpenSlide
+  name: Build OpenSlide
+  command: "make -j{{ build_parallelism }}"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+
+- listen: Rebuild OpenSlide
+  name: Install OpenSlide
+  command: "make install"
+  args:
+    chdir: "{{ vips_openslide_path }}"
+  become: yes
+  become_user: root
+  # VIPS depends on this library
+  notify: Rebuild VIPS
+
+- listen: Rebuild OpenSlide
+  name: Link OpenSlide
+  command: "ldconfig"
+  become: yes
+  become_user: root
