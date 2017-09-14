@@ -1,0 +1,7 @@
+---
+
+# Note, this ordering is very important, as handlers run in the order that they're defined
+- include: handlers/libtiff.yml
+- include: handlers/openjpeg.yml
+- include: handlers/openslide.yml
+- include: handlers/vips.yml

@@ -1,0 +1,29 @@
+---
+
+- listen: Rebuild LibTIFF
+  name: Configure LibTIFF
+  command: "./configure"
+  args:
+    chdir: "{{ vips_libtiff_path }}"
+
+- listen: Rebuild LibTIFF
+  name: Build LibTIFF
+  command: "make -j{{ build_parallelism }}"
+  args:
+    chdir: "{{ vips_libtiff_path }}"
+
+- listen: Rebuild LibTIFF
+  name: Install LibTIFF
+  command: "make install"
+  args:
+    chdir: "{{ vips_libtiff_path }}"
+  become: yes
+  become_user: root
+  # VIPS depends on this library
+  notify: Rebuild VIPS
+
+- listen: Rebuild LibTIFF
+  name: Link LibTIFF
+  command: "ldconfig"
+  become: yes
+  become_user: root

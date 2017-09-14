@@ -1,0 +1,44 @@
+---
+
+- listen: Rebuild OpenJPEG
+  name: Remove OpenJPEG build directory
+  file:
+    path: "{{ vips_openjpeg_path }}/build"
+    state: absent
+
+- listen: Rebuild OpenJPEG
+  name: Create OpenJPEG build directory
+  file:
+    path: "{{ vips_openjpeg_path }}/build"
+    state: directory
+
+- listen: Rebuild OpenJPEG
+  name: Configure OpenJPEG
+  command: "cmake .. -DCMAKE_BUILD_TYPE=Release"
+  args:
+    chdir: "{{ vips_openjpeg_path }}/build"
+#    creates: "{{ vips_openjpeg_path }}/build/Makefile"
+
+- listen: Rebuild OpenJPEG
+  name: Build OpenJPEG
+  command: "make -j{{ build_parallelism }}"
+  args:
+    chdir: "{{ vips_openjpeg_path }}/build"
+#    creates: "{{ vips_openjpeg_path }}/build/bin/libopenjp2.so"
+
+- listen: Rebuild OpenJPEG
+  name: Install OpenJPEG
+  command: "make install"
+  args:
+    chdir: "{{ vips_openjpeg_path }}/build"
+#    creates: "/usr/local/lib/libopenjp2.so"
+  become: yes
+  become_user: root
+  # OpenSlide depends on this library
+  notify: Rebuild OpenSlide
+
+- listen: Rebuild OpenJPEG
+  name: Link OpenJPEG
+  command: "ldconfig"
+  become: yes
+  become_user: root

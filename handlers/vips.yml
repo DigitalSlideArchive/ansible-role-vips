@@ -1,0 +1,33 @@
+---
+
+- listen: Rebuild VIPS
+  name: Initialize VIPS
+  command: "./autogen.sh"
+  args:
+    chdir: "{{ vips_path }}"
+
+- listen: Rebuild VIPS
+  name: Configure VIPS
+  command: "./configure"
+  args:
+    chdir: "{{ vips_path }}"
+
+- listen: Rebuild VIPS
+  name: Build VIPS
+  command: "make -j{{ build_parallelism }}"
+  args:
+    chdir: "{{ vips_path }}"
+
+- listen: Rebuild VIPS
+  name: Install VIPS
+  command: "make install"
+  args:
+    chdir: "{{ vips_path }}"
+  become: yes
+  become_user: root
+
+- listen: Rebuild VIPS
+  name: Link VIPS
+  command: "ldconfig"
+  become: yes
+  become_user: root
